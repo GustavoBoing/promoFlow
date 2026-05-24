@@ -124,20 +124,22 @@ Distribution
 
 ```text
 promoflow/
+src/
 │
 ├── api/
-├── database/
-├── scraper/
+├── core/
+├── models/
+├── repositories/
+├── services/
+├── integrations/
 ├── rules/
 ├── scheduler/
-├── telegram/
-├── ai/
-├── analytics/
-├── tests/
+├── utils/
 │
-├── main.py
-├── requirements.txt
-└── README.md
+├── config.py
+└── main.py
+tests/
+README.md
 ```
 
 ---
