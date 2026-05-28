@@ -5,8 +5,8 @@ class ProductService:
         pass
 
     #moda fitness e saúde são as categorias escolhidas
-    def validate_product(self, product):
-        pass
+    def validate_product(self, product: ):
+
         #validar regras que serão setadas para cada produto antes de qualquer outra etapa
 
     #normalizar o produto

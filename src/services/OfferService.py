@@ -23,6 +23,8 @@ class OfferService:
         product = {k: v for k, v in full_dict.items() if k in product_keys}
         promotion = {k: v for k, v in full_dict.items() if k in promotion_keys}
 
+
+
         # print("dicionario promotion: ", promotion)
         # print("dicionario product: ", product)
 
