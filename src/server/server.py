@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from routes.products_routes import products_routes
+from routes.OffersRoutes import offers_routes
+
 
 app = FastAPI()
 
-app.include_router(products_routes)
+app.include_router(offers_routes)
