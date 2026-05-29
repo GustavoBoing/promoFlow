@@ -1,24 +1,40 @@
-from schemas.ProductAndPromotionRequest import ProductAndPromotionRequest
+from itertools import product
+from tokenize import detect_encoding
+from src.schemas.PromotionData import PromotionData
+
+from src.exceptions.PromotionsErrors import *
 
 class PromotionService:
 
-    def create_promotion(self):
+    def create_promotion(self, promotion: PromotionData):
         #após todas as validações, a promoção será criada
+        self.validate_promotion(promotion)
         pass
 
-    def validate_promotion(self):
+    def validate_promotion(self, promotion: PromotionData):
         #validar regras que serão impostas antes da promoção ser aprovada
-        pass
+        #Verificar se o preço antigo é menor que o atual
+        #Verificar score
+        #Verificar a porcentagem de desconto
+        if self.validate_price(promotion.old_price, promotion.actual_price):
+            promotion.discount = self.calculate_percent(promotion.old_price, promotion.actual_price)
+            #self.verify_coupun()
+            #self.define_score
+        else:
+            raise CreatePromotionError(promotion)
 
     def calculate_percent(self, old_price, actual_price):
         #calcular valor percentual da promoção
-        pass
+        discount = 100 - ((actual_price/old_price)*100)
+        discount = round(discount, 1)
 
-    def detect_discount(self, old_price, actual_price):
-        #verificar se o preco atual é maior que o anterior
-        pass
+        if discount <= 10:
+            raise QuantityDiscountError(discount)
 
-    def verify_coupun(self):
-        #verificar a existência de cupons válidos para esse produto
-        pass
+        return discount
 
+    def validate_price(self, old_price, actual_price):
+        if old_price <= actual_price:
+            raise DetectDiscountError(old_price, actual_price)
+
+        return True

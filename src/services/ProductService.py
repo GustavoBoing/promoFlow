@@ -36,7 +36,6 @@ class ProductService:
 
         return product
 
-
     #verificar existencia do produto no banco de dados
     def product_exists(self, product: ProductData):
         pass

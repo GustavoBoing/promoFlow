@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
 
-class OffersRequest(BaseModel):
+class PromotionData(BaseModel):
     ProductIdMarketplace: str = Field(...,) # table products and promotion
     old_price: float = Field(...,) # table promotion
     actual_price: float = Field(...,) # table promotion
