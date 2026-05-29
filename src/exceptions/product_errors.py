@@ -2,11 +2,11 @@ class BusinessError(Exception):
     """Classe base para todos os erros de négocio da aplicação"""
     pass
 
-class PriceInvalidError(BusinessError):
-    """Lançado quando o preço é menor ou igual a zero"""
-    def __init__(self, price):
-        self.message = f"O preço R$ {price} é inválido. Deve ser maior que zero."
-        super().__init__(self.message)
+#class PriceInvalidError(BusinessError):
+#    """Lançado quando o preço é menor ou igual a zero"""
+#    def __init__(self, price):
+#        self.message = f"O preço R$ {price} é inválido. Deve ser maior que zero."
+#        super().__init__(self.message)
 
 class StockQuantityInvalid(BusinessError):
     """Lançado quando o stock é menor ou igual a zero"""
