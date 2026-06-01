@@ -1,16 +1,29 @@
 import pyshorteners
 from src.exceptions.product_errors import *
+from src.repositories.ProductRepository import ProductRepository
 from src.schemas.ProductData import ProductData
 
 class ProductService:
+
+    def __init__(self, repository: ProductRepository):
+        self.repository = repository
+
     def create_product(self, product: ProductData):
         self.validate_product(product)
         self.normalize_product(product)
         #productRepository deve ser chamado para que os dados sejam persistidos
 
+        if self.repository.exists(product.ProductIdMarketplace):
+            raise ProductExistsError
+
+        return self.repository.save(product)
+
     #moda fitness e saúde são as categorias escolhidas
     def validate_product(self, product: ProductData):
-        if product.category == "Saúde" and product.category == "Moda Fitness":
+        category_permits = ["Saúde", "MOda Fitness"]
+
+        #if product.category == "Saúde" or product.category == "Moda Fitness":
+        if product.category in category_permits:
             if product.stock <= 0:
                 raise StockQuantityInvalid(product.stock)
 
@@ -35,8 +48,3 @@ class ProductService:
         product.brand = product.brand.strip().lower()
 
         return product
-
-
-    #verificar existencia do produto no banco de dados
-    def product_exists(self, product: ProductData):
-        pass

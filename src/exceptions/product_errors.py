@@ -31,3 +31,8 @@ class SalesQuantityInvalid(BusinessError):
     def __init__(self, salesQuantity):
         self.message = f"A quantidade {salesQuantity} vendida é inválida"
         super().__init__(self.message)
+
+class ProductExistsError(BusinessError):
+    def __init__(self):
+        self.message = "O produto já existe!"
+        super().__init__(self.message)
