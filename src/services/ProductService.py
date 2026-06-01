@@ -16,7 +16,7 @@ class ProductService:
         if self.repository.exists(product.ProductIdMarketplace):
             raise ProductExistsError
 
-        return self.repository.save(product)
+        return True
 
     #moda fitness e saúde são as categorias escolhidas
     def validate_product(self, product: ProductData):

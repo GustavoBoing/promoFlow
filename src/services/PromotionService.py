@@ -1,8 +1,12 @@
-from schemas.ProductAndPromotionRequest import ProductAndPromotionRequest
+from src.schemas.PromotionData import PromotionData
+from src.repositories.PromotionRepository import PromotionRepository
 
 class PromotionService:
 
-    def create_promotion(self):
+    def __init__(self, repository: PromotionRepository):
+        self.repository = repository
+
+    def create_promotion(self, promotion: PromotionData):
         #após todas as validações, a promoção será criada
         pass
 
@@ -12,6 +16,7 @@ class PromotionService:
 
     def calculate_percent(self, old_price, actual_price):
         #calcular valor percentual da promoção
+
         pass
 
     def detect_discount(self, old_price, actual_price):

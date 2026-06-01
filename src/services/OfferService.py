@@ -4,16 +4,26 @@ from webbrowser import Elinks
 from schemas.OffersRequest import OffersRequest
 from schemas.ProductData import ProductData
 
+from src.exceptions.OffersErrors import create_offer_error
+from src.repositories.ProductRepository import ProductRepository
+from src.repositories.PromotionRepository import PromotionRepository
+from src.services.ProductService import ProductService
+from src.services.PromotionService import PromotionService
+
+from src.schemas.PromotionData import PromotionData
+
+
 class OfferService:
+
+    product_repository = ProductRepository()
+    promotion_repository = PromotionRepository()
+
     def process_offer(self, offer_data: OffersRequest):
         # Converterá o objeto rcebido em um dicionário python puro
+
         full_dict = offer_data.model_dump()
 
-        promotion_keys = {
-            "ProductIdMarketplace", "old_price", "actual_price",
-            "discount", "coupon", "date", "score"
-        }
-        product = ProductData(
+        product: ProductData = ProductData(
             ProductIdMarketplace= full_dict['ProductIdMarketplace'],
             name=full_dict['name'],
             category=full_dict['category'],
@@ -27,11 +37,23 @@ class OfferService:
             publish= full_dict['publish']
         )
 
-        #product = {k: v for k, v in full_dict.items() if k in product_keys}
-        #promotion = {k: v for k, v in full_dict.items() if k in promotion_keys}
+        promotion: PromotionData = PromotionData(
+            ProductIdMarketplace= full_dict['ProductIdMarketplace'], # table products and promotion
+            old_price= full_dict['old_price'], # table promotion
+            actual_price= full_dict['actual_price'],
+            discount=  full_dict['discount'],
+            coupon=  full_dict['coupon'],
+            date=  full_dict['date'],
+            score=  full_dict['score']
+        )
+
+        product_service = ProductService(self.product_repository)
+        promotion_service = PromotionService(self.promotion_repository)
 
 
+        if product_service.create_product(product):
+            promotion_service.create_promotion(promotion)
+        else:
+            raise create_offer_error
 
-        # print("dicionario promotion: ", promotion)
-        # print("dicionario product: ", product)
-
+        return product, promotion
