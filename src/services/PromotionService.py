@@ -1,3 +1,4 @@
+from src.exceptions.PromotionsErrors import ErrorDiscount
 from src.schemas.PromotionData import PromotionData
 from src.repositories.PromotionRepository import PromotionRepository
 
@@ -6,24 +7,44 @@ class PromotionService:
     def __init__(self, repository: PromotionRepository):
         self.repository = repository
 
-    def create_promotion(self, promotion: PromotionData):
+    def create_promotion(self, promotion: PromotionData ):
         #após todas as validações, a promoção será criada
-        pass
 
-    def validate_promotion(self):
-        #validar regras que serão impostas antes da promoção ser aprovada
-        pass
+        promotion = self.validate_promotion(promotion)
 
-    def calculate_percent(self, old_price, actual_price):
-        #calcular valor percentual da promoção
+        return self.repository.save(promotion)
 
-        pass
 
-    def detect_discount(self, old_price, actual_price):
+    @staticmethod
+    def detect_discount(old_price, actual_price):
         #verificar se o preco atual é maior que o anterior
-        pass
+        if actual_price <= 0 or old_price <= 0:
+            raise ErrorDiscount
+        elif actual_price >= old_price:
+            raise ErrorDiscount
 
-    def verify_coupun(self):
-        #verificar a existência de cupons válidos para esse produto
-        pass
+    def validate_promotion(self, promotion: PromotionData):
+        self.detect_discount(promotion.old_price, promotion.actual_price)
+        promotion.discount = self.calculate_percent(promotion.old_price, promotion.actual_price)
+        self.get_coupun(promotion)
+
+        return promotion
+
+    @staticmethod
+    def calculate_percent(old_price, actual_price):
+        percent = ((actual_price/old_price) - 1) * (-100)
+        return percent
+
+    def get_coupun(self, promotion: PromotionData):
+        # lógica de receber cupom
+        coupon = None
+
+        #Inserindo dados do cupom na variável de promoção
+        promotion.coupon = coupon
+
+    def update_promotion(self, promotion: PromotionData):
+
+        self.validate_promotion(promotion)
+
+        return self.repository.update(promotion)
 

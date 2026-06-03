@@ -22,3 +22,25 @@ class ProductRepository:
 
         return False
 
+    def get_product_by_ProductIdMarketplace(self, product_id_marketplace):
+        for p in self.products:
+            if p.ProductIdMarketplace == product_id_marketplace:
+                return p
+
+        return None
+
+    def update(self, product: ProductData):
+        product_old: ProductData = self.get_product_by_ProductIdMarketplace(product.ProductIdMarketplace)
+
+        product_old.name = product.name
+        product_old.category = product.category
+        product_old.link = product.link
+        product_old.marketplace = product.marketplace
+        product_old.image = product.image
+        product_old.assessment = product.assessment
+        product_old.brand = product.brand
+        product_old.stock = product.stock
+        product_old.sales_quantity = product.sales_quantity
+        product_old.publish = False
+
+        return product_old

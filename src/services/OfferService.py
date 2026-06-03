@@ -51,9 +51,8 @@ class OfferService:
         promotion_service = PromotionService(self.promotion_repository)
 
 
-        if product_service.create_product(product):
-            promotion_service.create_promotion(promotion)
-        else:
-            raise create_offer_error
+        product_service.create_product(product)
+
+
 
         return product, promotion
