@@ -22,7 +22,7 @@ class ProductRepository:
 
         return False
 
-    def get_product_by_ProductIdMarketplace(self, product_id_marketplace):
+    def get_product_by_product_id_marketplace(self, product_id_marketplace):
         for p in self.products:
             if p.ProductIdMarketplace == product_id_marketplace:
                 return p
@@ -30,7 +30,7 @@ class ProductRepository:
         return None
 
     def update(self, product: ProductData):
-        product_old: ProductData = self.get_product_by_ProductIdMarketplace(product.ProductIdMarketplace)
+        product_old: ProductData = self.get_product_by_product_id_marketplace(product.ProductIdMarketplace)
 
         product_old.name = product.name
         product_old.category = product.category
