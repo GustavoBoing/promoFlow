@@ -1,5 +1,16 @@
+import os
+import json
+from google import genai
+from google.genai import types
+
 class ScoringService:
-    def calculate_score(self):
+
+    def __init__(self):
+        self.client = genai.client
+
+    def calculate_score(self, product_name: str, product_assessment: float, ):
+
+
         pass
 
     #definir regras de score

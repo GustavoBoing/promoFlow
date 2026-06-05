@@ -1,3 +1,4 @@
+from src.exceptions.product_errors import GetProductError
 from src.schemas.ProductData import ProductData
 
 class ProductRepository:
@@ -31,6 +32,9 @@ class ProductRepository:
 
     def update(self, product: ProductData):
         product_old: ProductData = self.get_product_by_product_id_marketplace(product.ProductIdMarketplace)
+
+        if product_old is None:
+            raise GetProductError
 
         product_old.name = product.name
         product_old.category = product.category

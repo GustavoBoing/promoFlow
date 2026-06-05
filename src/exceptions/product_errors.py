@@ -36,3 +36,8 @@ class ProductExistsError(BusinessError):
     def __init__(self):
         self.message = "O produto já existe!"
         super().__init__(self.message)
+
+class GetProductError(BusinessError):
+    def __init__(self):
+        self.message = "produto não encontrado"
+        super().__init__(self.message)

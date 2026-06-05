@@ -9,18 +9,15 @@ class ProductService:
         self.repository = repository
 
     def create_product(self, product: ProductData):
-        self.validate_product(product)
         self.normalize_product(product)
+        self.validate_product(product)
         #productRepository deve ser chamado para que os dados sejam persistidos
 
-        if self.repository.exists(product.ProductIdMarketplace):
-            raise ProductExistsError
-
-        return True
+        return self.repository.save(product)
 
     #moda fitness e saúde são as categorias escolhidas
     def validate_product(self, product: ProductData):
-        category_permits = ["Saúde", "MOda Fitness"]
+        category_permits = ["saúde", "moda fitness"]
 
         #if product.category == "Saúde" or product.category == "Moda Fitness":
         if product.category in category_permits:
@@ -48,3 +45,9 @@ class ProductService:
         product.brand = product.brand.strip().lower()
 
         return product
+
+    def update_product(self, product: ProductData):
+        self.normalize_product(product)
+        self.validate_product(product)
+
+        return self.repository.update(product)
