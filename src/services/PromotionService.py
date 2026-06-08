@@ -10,8 +10,6 @@ class PromotionService:
     def create_promotion(self, promotion: PromotionData ):
         #após todas as validações, a promoção será criada
 
-        promotion = self.validate_promotion(promotion)
-
         return self.repository.save(promotion)
 
 
@@ -27,8 +25,6 @@ class PromotionService:
         self.detect_discount(promotion.old_price, promotion.actual_price)
         promotion.discount = self.calculate_percent(promotion.old_price, promotion.actual_price)
         self.get_coupun(promotion)
-
-        return promotion
 
     @staticmethod
     def calculate_percent(old_price, actual_price):

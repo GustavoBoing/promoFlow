@@ -3,15 +3,19 @@ import json # Manipular o formato JSON, ela transforma o texto puro do gemini em
 from google import genai # Permite o acesso os modelos do Gemini
 from google.genai import types
 
+from src.schemas.ProductData import ProductData
+from src.schemas.PromotionData import PromotionData
+
 class ScoringService:
 
     def __init__(self):
         #O cliente busca automaticamente a variável de ambiente GEMINI_API_KEY
         self.client = genai.Client()
 
-    def calculate_score(self, product_name: str, product_assessment: float,
-                        product_stock: int, product_qtde_sales: int, promotion_old_price: float,
-                        promotion_actual_price: float, promotion_discount: float, promotion_coupon: str) -> dict:
+    def calculate_score(self, #product_name: str, product_assessment: float,
+                        #product_stock: int, product_qtde_sales: int, promotion_old_price: float,
+                        #promotion_actual_price: float, promotion_discount: float, promotion_coupon: str
+                        promotion: PromotionData, product: ProductData) -> dict:
         prompt = f"""
         Você é o motor de inteligência do sistema Promoflow.
         Analise o produto abaixo e gere um score de atratividade de 0 a 100 (apenas numeros inteiros)
@@ -25,14 +29,14 @@ class ScoringService:
         - Um produto que tem desconto e tem cupom é um bom sinal
         
         Dados do produto:
-        - Titulo: {product_name}
-        - Avaliação: {product_assessment}
-        - Estoque: {product_stock}
-        - Quantidade de vendas: {product_qtde_sales}
-        - Preço antigo: R$ {promotion_old_price:.2f}
-        - Preco atual: R$ {promotion_actual_price:.2f}
-        - Desconto: {promotion_discount:.1f}%
-        - Cupom: {promotion_coupon}
+        - Titulo: {product.name}
+        - Avaliação: {product.assessment}
+        - Estoque: {product.stock}
+        - Quantidade de vendas: {product.sales_quantity}
+        - Preço antigo: R$ {promotion.old_price:.2f}
+        - Preco atual: R$ {promotion.actual_price:.2f}
+        - Desconto: {promotion.discount:.1f}%
+        - Cupom: {promotion.coupon}
         
         Sua resposta DEVE ser estritamente um objeto JSON com os campos 'score' (inteiro) e 'justification' (string curta).
         """

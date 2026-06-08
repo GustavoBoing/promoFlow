@@ -47,7 +47,7 @@ class ProductService:
         return product
 
     def update_product(self, product: ProductData):
-        self.normalize_product(product)
-        self.validate_product(product)
+        #self.normalize_product(product)
+        #self.validate_product(product)
 
         return self.repository.update(product)
