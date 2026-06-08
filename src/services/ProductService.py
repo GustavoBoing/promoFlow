@@ -9,8 +9,8 @@ class ProductService:
         self.repository = repository
 
     def create_product(self, product: ProductData):
-        self.normalize_product(product)
-        self.validate_product(product)
+        # self.normalize_product(product)
+        # self.validate_product(product)
         #productRepository deve ser chamado para que os dados sejam persistidos
 
         return self.repository.save(product)
