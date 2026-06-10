@@ -1,3 +1,4 @@
+from src.exceptions.PublicationsErrors import ProductPublishError, ScoreInvalidError
 from src.schemas.ProductData import ProductData
 from src.schemas.PromotionData import PromotionData
 
@@ -9,10 +10,10 @@ class PublicationService:
     #loop pelo que não foi publicado
     def evaluate_publication(self, promotion: PromotionData, product: ProductData):
         if not self.is_already_published(product):
-            raise Exception("Produto já publicado")
+            raise ProductPublishError(product)
 
         if not self.is_score_valid(promotion):
-            raise Exception("Score é inválido")
+            raise ScoreInvalidError(promotion.score)
 
         product.publish = True
 
