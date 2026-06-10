@@ -45,6 +45,6 @@ class ProductRepository:
         product_old.brand = product.brand
         product_old.stock = product.stock
         product_old.sales_quantity = product.sales_quantity
-        product_old.publish = False
+
 
         return product_old

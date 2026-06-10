@@ -37,6 +37,7 @@ class PromotionRepository:
         promotion_old.coupon = promotion.coupon
         promotion_old.date = promotion.date
         promotion_old.score = promotion.score
+        promotion_old.publish = False
 
         return promotion_old
 

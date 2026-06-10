@@ -9,3 +9,4 @@ class PromotionData(BaseModel):
     coupon: str | None = None # table promotion
     date: datetime = Field(...,) # table promotion
     score: float = Field(...,) # table promotion
+    publish: bool = Field(...,) # table products

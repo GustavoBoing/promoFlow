@@ -12,4 +12,3 @@ class ProductData(BaseModel):
     brand: str = Field(...,) # table products
     stock: int = Field(...,) # table products
     sales_quantity: int = Field(...,) # table products
-    publish: bool = Field(...,) # table products

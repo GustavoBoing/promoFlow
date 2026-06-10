@@ -34,8 +34,7 @@ class OfferService:
             assessment= full_dict['assessment'],
             brand= full_dict['brand'],
             stock= full_dict['stock'],
-            sales_quantity= full_dict['sales_quantity'],
-            publish= full_dict['publish']
+            sales_quantity= full_dict['sales_quantity']
         )
 
         promotion: PromotionData = PromotionData(
@@ -45,7 +44,8 @@ class OfferService:
             discount=  full_dict['discount'],
             coupon=  full_dict['coupon'],
             date=  full_dict['date'],
-            score=  full_dict['score']
+            score=  full_dict['score'],
+            publish= full_dict['publish']
         )
 
         product_service = ProductService(self.product_repository)

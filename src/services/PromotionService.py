@@ -40,7 +40,7 @@ class PromotionService:
 
     def update_promotion(self, promotion: PromotionData):
 
-        self.validate_promotion(promotion)
+        #self.validate_promotion(promotion)
 
         return self.repository.update(promotion)
 

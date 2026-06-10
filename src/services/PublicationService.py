@@ -8,17 +8,17 @@ class PublicationService:
     #definir o que será publicado
     #evitar duplicidade de publicações
     #loop pelo que não foi publicado
-    def evaluate_publication(self, promotion: PromotionData, product: ProductData):
-        if not self.is_already_published(product):
-            raise ProductPublishError(product)
+    def evaluate_publication(self, promotion: PromotionData):
+        if not self.is_already_published(promotion):
+            raise ProductPublishError(promotion)
 
         if not self.is_score_valid(promotion):
             raise ScoreInvalidError(promotion.score)
 
-        product.publish = True
+        promotion.publish = True
 
-    def is_already_published(self, product: ProductData):
-        if not product.publish:
+    def is_already_published(self, promotion: PromotionData):
+        if not promotion.publish:
             return True
         return False
 
