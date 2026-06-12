@@ -11,6 +11,7 @@ from src.services.ProductService import ProductService
 from src.services.PromotionService import PromotionService
 
 from src.schemas.PromotionData import PromotionData
+from src.services.PublicationService import PublicationService
 from src.services.ScoringService import ScoringService
 
 
@@ -18,8 +19,9 @@ class OfferService:
 
     product_repository = ProductRepository()
     promotion_repository = PromotionRepository()
+    publication_service = PublicationService()
 
-    def process_offer(self, offer_data: OffersRequest):
+    async def process_offer(self, offer_data: OffersRequest):
         # Converterá o objeto rcebido em um dicionário python puro
 
         full_dict = offer_data.model_dump()
@@ -82,6 +84,7 @@ class OfferService:
             product_service.create_product(product)
             promotion_service.create_promotion(promotion)
 
+        await self.publication_service.evaluate_publication(promotion, product)
 
         #product_service.create_product(product)
         return product, promotion

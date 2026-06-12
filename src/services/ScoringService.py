@@ -10,7 +10,7 @@ class ScoringService:
 
     def __init__(self):
         #O cliente busca automaticamente a variável de ambiente GEMINI_API_KEY
-        self.client = genai.Client()
+        self.client = genai.Client(api_key="AQ.Ab8RN6JVHUG2zuVMUEUCIDtAlJM8gmKthucoUli4sG11Gs--Hg")
 
     def calculate_score(self, #product_name: str, product_assessment: float,
                         #product_stock: int, product_qtde_sales: int, promotion_old_price: float,
