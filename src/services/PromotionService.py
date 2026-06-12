@@ -1,4 +1,4 @@
-from src.exceptions.PromotionsErrors import ErrorDiscount
+from src.exceptions.PromotionsErrors import ErrorDiscount, ErrorDiscountPercent
 from src.schemas.PromotionData import PromotionData
 from src.repositories.PromotionRepository import PromotionRepository
 
@@ -12,6 +12,10 @@ class PromotionService:
 
         return self.repository.save(promotion)
 
+    def validate_promotion(self, promotion: PromotionData):
+        self.detect_discount(promotion.old_price, promotion.actual_price)
+        promotion.discount = self.calculate_percent(promotion.old_price, promotion.actual_price)
+        self.get_coupun(promotion)
 
     @staticmethod
     def detect_discount(old_price, actual_price):
@@ -21,14 +25,11 @@ class PromotionService:
         elif actual_price >= old_price:
             raise ErrorDiscount
 
-    def validate_promotion(self, promotion: PromotionData):
-        self.detect_discount(promotion.old_price, promotion.actual_price)
-        promotion.discount = self.calculate_percent(promotion.old_price, promotion.actual_price)
-        self.get_coupun(promotion)
-
     @staticmethod
     def calculate_percent(old_price, actual_price):
         percent = ((actual_price/old_price) - 1) * (-100)
+        if percent < 10:
+            raise ErrorDiscountPercent
         return percent
 
     def get_coupun(self, promotion: PromotionData):
