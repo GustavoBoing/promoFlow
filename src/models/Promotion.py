@@ -10,7 +10,7 @@ class Promotion(Base):
     Id = Column(Integer, primary_key=True, autoincrement=True)
 
     ProductIdMarketplace = Column(String, ForeignKey("products.ProductIdMarketplace", ondelete="SET NULL"))
-    products = relationship("Product", back_populates="promotions")
+    product = relationship("Product", back_populates="promotions")
 
     old_price = Column(Double)
     actual_price = Column(Double)
