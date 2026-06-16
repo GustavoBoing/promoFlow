@@ -1,37 +1,57 @@
+from sqlalchemy.orm import Session
+from src.models.Product import Product
+
 from src.exceptions.product_errors import GetProductError
 from src.schemas.ProductData import ProductData
 
 class ProductRepository:
-    def __init__(self):
-        self.products = []
+    def __init__(self, db: Session):
+        self.db = db
+        #self.products = []
 
     #salvar produto
     def save(self, product: ProductData):
-        self.products.append(product)
+        """Cria um produto no banco de dados"""
+        #self.products.append(product)
 
-        return product
+        product_dto = product.__dict__
+
+        db_product = Product(**product_dto)
+
+        self.db.add(db_product)
+        self.db.commit()
+
+        return db_product
 
     #Filtrar todos os produtos
     def get_all(self):
-        return self.products
+        """Retorna todos os produtos da tabela"""
+        #return self.products
+        return self.db.query(Product).all()
 
     #Verificar se existe um produto identico
     def exists(self, product_id_marketplace: str):
-        for p in self.products:
-            if p.ProductIdMarketplace == product_id_marketplace:
-                return True
+        product = self.get_product_by_product_id_marketplace(product_id_marketplace)
+
+        if product is not None:
+            return True
 
         return False
 
-    def get_product_by_product_id_marketplace(self, product_id_marketplace):
-        for p in self.products:
-            if p.ProductIdMarketplace == product_id_marketplace:
-                return p
+    def get_product_by_product_id_marketplace(self, product_id_marketplace) -> Product | None:
+        produto: Product | None = (
+            self.db.query(Product)
+           .filter_by(ProductIdMarketplace = product_id_marketplace)
+           .first()
+        )
 
-        return None
+        if produto is None:
+            return None
+
+        return produto
 
     def update(self, product: ProductData):
-        product_old: ProductData = self.get_product_by_product_id_marketplace(product.ProductIdMarketplace)
+        product_old = self.get_product_by_product_id_marketplace(product.ProductIdMarketplace)
 
         if product_old is None:
             raise GetProductError
@@ -45,6 +65,10 @@ class ProductRepository:
         product_old.brand = product.brand
         product_old.stock = product.stock
         product_old.sales_quantity = product.sales_quantity
+
+        self.db.commit()
+
+        self.db.refresh(product_old)
 
 
         return product_old
