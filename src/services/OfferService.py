@@ -1,10 +1,6 @@
-from tkinter import image_names
-from webbrowser import Elinks
+from src.schemas.OffersRequest import OffersRequest
+from src.schemas.ProductData import ProductData
 
-from schemas.OffersRequest import OffersRequest
-from schemas.ProductData import ProductData
-
-from src.exceptions.OffersErrors import create_offer_error
 from src.repositories.ProductRepository import ProductRepository
 from src.repositories.PromotionRepository import PromotionRepository
 from src.services.ProductService import ProductService
@@ -14,12 +10,18 @@ from src.schemas.PromotionData import PromotionData
 from src.services.PublicationService import PublicationService
 from src.services.ScoringService import ScoringService
 
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from src.database.Database import get_db
 
 class OfferService:
 
-    product_repository = ProductRepository()
-    promotion_repository = PromotionRepository()
-    publication_service = PublicationService()
+    def __init__(self, db: Session):
+        self.db = db
+        self.product_repository = ProductRepository(self.db)
+        self.promotion_repository = PromotionRepository(self.db)
+        self.publication_service = PublicationService()
+
 
     async def process_offer(self, offer_data: OffersRequest):
         # Converterá o objeto rcebido em um dicionário python puro

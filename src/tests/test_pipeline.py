@@ -1,5 +1,6 @@
 import asyncio
 
+from src.database.Database import SessionLocal
 from src.services.OfferService import OfferService
 from src.schemas.OffersRequest import OffersRequest
 
@@ -24,9 +25,13 @@ offer = OffersRequest(
 )
 
 async def main():
-    service = OfferService()
+    db = SessionLocal()
+
+    service = OfferService(db)
 
     await service.process_offer(offer)
+
+    db.close()
 
 if __name__ == "__main__":
     asyncio.run(main())
