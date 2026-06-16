@@ -1,32 +1,54 @@
+from sqlalchemy.orm import Session
+from src.models.Promotion import Promotion
+
 from src.exceptions.PromotionsErrors import GetPromotionError
 from src.schemas.PromotionData import PromotionData
 
 
 class PromotionRepository:
-    def __init__(self):
-        self.promotions = []
+    def __init__(self, db: Session):
+        #self.promotions = []
+        self.db = db
 
     def save(self, promotion: PromotionData):
-        self.promotions.append(promotion)
+        """Cria uma promoção no banco de dados"""
+        #self.promotions.append(promotion)
+
+        promotion_dto = promotion.__dict__
+
+        promotion_db = Promotion(**promotion_dto)
+
+        self.db.add(promotion_db)
+        self.db.commit()
 
         return promotion
 
-    def exists(self, product_id_marketplace):
-        for p in self.promotions:
-            if p.ProductIdMarketplace == product_id_marketplace :
-                return True
+    def get_promotion_by_id_product(self, product_id_marketplace) -> Promotion | None:
+        # for p in self.promotions:
+        #     if p.ProductIdMarketplace == product_id_marketplace:
+        #         return p
 
-        return False
+        promotion: Promotion | None = (
+            self.db.query(Promotion)
+            .filter_by(ProductIdMarketplace = product_id_marketplace)
+            .first()
+        )
 
-    def get_promotion_by_id_product(self, product_id_marketplace):
-        for p in self.promotions:
-            if p.ProductIdMarketplace == product_id_marketplace:
-                return p
+        if promotion is not None:
+            return promotion
 
         return None
 
+    def exists(self, product_id_marketplace):
+        promotion = self.get_promotion_by_id_product(product_id_marketplace)
+
+        if promotion is not None:
+            return True
+
+        return False
+
     def update(self, promotion: PromotionData):
-        promotion_old: PromotionData = self.get_promotion_by_id_product(promotion.ProductIdMarketplace)
+        promotion_old = self.get_promotion_by_id_product(promotion.ProductIdMarketplace)
 
         if promotion_old is None:
             raise GetPromotionError
@@ -39,7 +61,10 @@ class PromotionRepository:
         promotion_old.score = promotion.score
         promotion_old.publish = False
 
+        self.db.commit()
+        self.db.refresh(promotion_old)
+
         return promotion_old
 
     def get_all(self):
-        return self.promotions
+        return self.db.query(Promotion).all()
