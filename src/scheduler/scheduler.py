@@ -1,7 +1,6 @@
-import asyncio
-import datetime
 
-from apscheduler.schedulers.background import BackgroundScheduler
+#from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
@@ -11,6 +10,7 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
 from apscheduler import events
 
+from src.providers.mercado_livre_provider import MercadoLivreProvider
 from src.services.pipeline_service import PipelineService
 
 #backgroundScheduler
@@ -20,10 +20,12 @@ from src.services.pipeline_service import PipelineService
 # 1. DEFINIÇÃO DAS FUNÇÕES (TASKS / JOBS)
 # ==========================================
 
-def send_promotions():
+async def send_promotions():
     """Tarefa executada via cron as 9horas"""
-    pipeline = PipelineService()
-    asyncio.run(pipeline.run())
+    provider = MercadoLivreProvider()
+    offers = provider.get_offers()
+    pipeline = PipelineService(offers)
+    await pipeline.run()
 
 # ==========================================
 # 2. CONFIGURAÇÃO DE LISTENERS (OUVINTES)
@@ -68,7 +70,7 @@ def initializer_system_promotions():
     }
 
     #Instanciando o Scheduler com toda a configuração ja imposta
-    scheduler = BackgroundScheduler(
+    scheduler = AsyncIOScheduler(
         jobstores=jobstores,
         executors=executors,
         job_defaults=job_defaults,
