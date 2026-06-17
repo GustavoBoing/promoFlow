@@ -14,14 +14,14 @@ class PromotionRepository:
         """Cria uma promoção no banco de dados"""
         #self.promotions.append(promotion)
 
-        promotion_dto = promotion.__dict__
+        promotion_dto = promotion.model_dump()
 
         promotion_db = Promotion(**promotion_dto)
 
         self.db.add(promotion_db)
         self.db.commit()
 
-        return promotion
+        return promotion_db
 
     def get_promotion_by_id_product(self, product_id_marketplace) -> Promotion | None:
         # for p in self.promotions:

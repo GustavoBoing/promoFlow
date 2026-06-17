@@ -14,7 +14,7 @@ class ProductRepository:
         """Cria um produto no banco de dados"""
         #self.products.append(product)
 
-        product_dto = product.__dict__
+        product_dto = product.model_dump()
 
         db_product = Product(**product_dto)
 
