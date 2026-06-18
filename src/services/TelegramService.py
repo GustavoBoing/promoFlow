@@ -88,9 +88,14 @@ class TelegramService:
         if not result_data:
             raise Exception("Falha no retorno da copy pela LLM")
 
+        body_content = result_data['body']
+
+        if isinstance(body_content, list):
+            body_content = "\n".join(body_content)
+
         copy_complete = "\n".join([
             result_data['headline'],
-            result_data['body'],
+            body_content,
             f" {result_data['cta']}\n👉 {product_link}"
         ])
 

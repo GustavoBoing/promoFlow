@@ -1,11 +1,14 @@
+from requests.sessions import Session
+
 from src.exceptions.PromotionsErrors import ErrorDiscount, ErrorDiscountPercent
 from src.schemas.PromotionData import PromotionData
 from src.repositories.PromotionRepository import PromotionRepository
 
 class PromotionService:
 
-    def __init__(self, repository: PromotionRepository):
-        self.repository = repository
+    def __init__(self, db: Session):
+        self.db = db
+        self.repository = PromotionRepository(self.db)
 
     def create_promotion(self, promotion: PromotionData ):
         #após todas as validações, a promoção será criada

@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from routes.OffersRoutes import offers_routes
+from src.routes.OffersRoutes import offers_routes
+from src.routes.app import app_route
 
-
-app = FastAPI()
+app = FastAPI(title="Promoflow Backend")
 
 app.include_router(offers_routes)
+app.include_router(app_route)

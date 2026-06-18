@@ -24,7 +24,7 @@ class ProductService:
             if product.stock <= 0:
                 raise StockQuantityInvalid(product.stock)
 
-            if product.assessment < 8:
+            if product.assessment < 3.5:
                 raise AssessmentInvalid(product.assessment)
 
             if product.sales_quantity < 2:

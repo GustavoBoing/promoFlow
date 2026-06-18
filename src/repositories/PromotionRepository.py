@@ -13,7 +13,7 @@ class PromotionRepository:
     def save(self, promotion: PromotionData):
         """Cria uma promoção no banco de dados"""
         #self.promotions.append(promotion)
-
+        promotion.publish = True
         promotion_dto = promotion.model_dump()
 
         promotion_db = Promotion(**promotion_dto)
@@ -59,7 +59,7 @@ class PromotionRepository:
         promotion_old.coupon = promotion.coupon
         promotion_old.date = promotion.date
         promotion_old.score = promotion.score
-        promotion_old.publish = False
+        promotion_old.publish = True
 
         self.db.commit()
         self.db.refresh(promotion_old)

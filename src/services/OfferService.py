@@ -20,7 +20,9 @@ class OfferService:
         self.db = db
         self.product_repository = ProductRepository(self.db)
         self.promotion_repository = PromotionRepository(self.db)
-        self.publication_service = PublicationService()
+        self.publication_service = PublicationService(self.db)
+        self.product_service = ProductService(self.product_repository)
+        self.promotion_service = PromotionService(self.db)
 
 
     async def process_offer(self, offer_data: OffersRequest):
@@ -52,15 +54,14 @@ class OfferService:
             publish= full_dict['publish']
         )
 
-        product_service = ProductService(self.product_repository)
-        promotion_service = PromotionService(self.promotion_repository)
+
 
         #Normalizando produto
-        product_service.normalize_product(product)
-        product_service.validate_product(product)
+        self.product_service.normalize_product(product)
+        self.product_service.validate_product(product)
 
         #Normalizando promoção
-        promotion_service.validate_promotion(promotion)
+        self.promotion_service.validate_promotion(promotion)
 
         #Inserir score na variável promotion
         scoring_service = ScoringService()
@@ -76,15 +77,15 @@ class OfferService:
         promotion.score = score['score']
 
         if self.product_repository.exists(product.ProductIdMarketplace):
-            product_service.update_product(product)
+            self.product_service.update_product(product)
 
             if self.promotion_repository.exists(promotion.ProductIdMarketplace):
-                promotion_service.update_promotion(promotion)
+                self.promotion_service.update_promotion(promotion)
             else:
-                promotion_service.create_promotion(promotion)
+                self.promotion_service.create_promotion(promotion)
         else:
-            product_service.create_product(product)
-            promotion_service.create_promotion(promotion)
+            self.product_service.create_product(product)
+            self.promotion_service.create_promotion(promotion)
 
         await self.publication_service.evaluate_publication(promotion, product)
 
