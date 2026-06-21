@@ -2,15 +2,18 @@ import os #Lê variáveis de ambiente
 import json # Manipular o formato JSON, ela transforma o texto puro do gemini em um dicionario Python
 from google import genai # Permite o acesso os modelos do Gemini
 from google.genai import types
+from dotenv import load_dotenv
 
 from src.schemas.ProductData import ProductData
 from src.schemas.PromotionData import PromotionData
 
 class ScoringService:
 
+    load_dotenv()
+
     def __init__(self):
         #O cliente busca automaticamente a variável de ambiente GEMINI_API_KEY
-        self.client = genai.Client(api_key="AQ.Ab8RN6JVHUG2zuVMUEUCIDtAlJM8gmKthucoUli4sG11Gs--Hg")
+        self.client = genai.Client(api_key=os.getenv('SECURITY_KEY_GEMINI'))
 
     def calculate_score(self, #product_name: str, product_assessment: float,
                         #product_stock: int, product_qtde_sales: int, promotion_old_price: float,

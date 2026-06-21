@@ -1,5 +1,8 @@
 import asyncio
 import json
+import os
+
+from dotenv import load_dotenv
 
 from google import genai
 from google.genai import types
@@ -11,10 +14,12 @@ from src.schemas.ProductData import ProductData
 
 class TelegramService:
 
-    def __init__(self):
-        self.client = genai.Client(api_key="AQ.Ab8RN6JVHUG2zuVMUEUCIDtAlJM8gmKthucoUli4sG11Gs--Hg")
+    load_dotenv()
 
-        self.telegram_token = "8559854372:AAHY2cerbSRJVgjB0pkUzt_MD_2OTVkWHnA"
+    def __init__(self):
+        self.client = genai.Client(api_key=os.getenv('SECURITY_KEY_GEMINI'))
+
+        self.telegram_token = os.getenv('SECURITY_API_KEY_TELEGRAM')
         self.chat_id = "-5278291135"
 
         self.bot = Bot(token=self.telegram_token)
